@@ -1,0 +1,20 @@
+{
+  "network": "baseMainnet",
+  "chainId": 8453,
+  "contracts": {
+    "IdentityRegistry": "0xEce3A8d6c654148d56e957b1273Cb0f798456fA5",
+    "ReputationRegistry": "0xc62de0A8Bc9298e20e9ca6c9551B950F369fE2db",
+    "ValidationRegistry": "0x205054f44C537DBeE6A6079E58B79601973b52f4",
+    "AgentBazaar": "0x7134f2f07F489F99a9C984E2D0a45f49142d5fF0",
+    "USDC": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+  },
+  "deployer": "0x8F058fE6b568D97f85d517Ac441b52B95722fDDe",
+  "timestamp": "2026-02-09T06:17:11.786Z",
+  "verified": true,
+  "verificationLinks": {
+    "IdentityRegistry": "https://basescan.org/address/0xEce3A8d6c654148d56e957b1273Cb0f798456fA5#code",
+    "ReputationRegistry": "https://basescan.org/address/0xc62de0A8Bc9298e20e9ca6c9551B950F369fE2db#code",
+    "ValidationRegistry": "https://basescan.org/address/0x205054f44C537DBeE6A6079E58B79601973b52f4#code",
+    "AgentBazaar": "https://basescan.org/address/0x7134f2f07F489F99a9C984E2D0a45f49142d5fF0#code"
+  }
+}

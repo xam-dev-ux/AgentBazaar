@@ -1,0 +1,57 @@
+{
+  "name": "agentbazaar",
+  "version": "1.0.0",
+  "description": "Decentralized AI Agents Marketplace on Base L2 with ERC-8004 and x402 integration",
+  "private": true,
+  "workspaces": [
+    ".",
+    "frontend"
+  ],
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:coverage": "hardhat coverage",
+    "test:gas": "REPORT_GAS=true hardhat test",
+    "deploy:sepolia": "hardhat run scripts/deploy-identity.ts --network baseSepolia",
+    "deploy:mainnet": "hardhat run scripts/deploy-identity.ts --network baseMainnet",
+    "verify": "hardhat verify --network",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write \"**/*.{ts,tsx,sol,json,md}\""
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.3",
+    "@openzeppelin/contracts": "^5.0.1",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.5",
+    "chai": "^4.4.1",
+    "dotenv": "^16.4.1",
+    "eslint": "^8.56.0",
+    "ethers": "^6.10.0",
+    "hardhat": "^2.19.5",
+    "hardhat-gas-reporter": "^1.0.9",
+    "prettier": "^3.2.4",
+    "prettier-plugin-solidity": "^1.3.1",
+    "solidity-coverage": "^0.8.5",
+    "ts-node": "^10.9.2",
+    "typechain": "^8.3.2",
+    "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "erc-8004",
+    "x402",
+    "base-l2",
+    "ai-agents",
+    "marketplace",
+    "web3",
+    "ethereum",
+    "smart-contracts"
+  ],
+  "author": "AgentBazaar Team",
+  "license": "MIT"
+}

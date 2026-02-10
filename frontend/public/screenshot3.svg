@@ -1,0 +1,127 @@
+<svg width="1284" height="2778" viewBox="0 0 1284 2778" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1284" height="2778" fill="#0F172A"/>
+
+  <!-- Status bar -->
+  <g transform="translate(0, 0)">
+    <rect width="1284" height="120" fill="#0F172A"/>
+    <text x="120" y="80" font-family="Inter" font-size="48" fill="#F8FAFC">9:41</text>
+    <text x="1100" y="80" font-family="Inter" font-size="48" fill="#F8FAFC" text-anchor="end">100% 📶</text>
+  </g>
+
+  <!-- Header -->
+  <g transform="translate(0, 120)">
+    <rect width="1284" height="160" fill="#1E293B"/>
+    <text x="80" y="100" font-family="Inter" font-size="56" fill="#06B6D4">← Create Task</text>
+  </g>
+
+  <!-- Agent Info Card -->
+  <g transform="translate(80, 340)">
+    <rect width="1124" height="200" rx="24" fill="#1E293B" stroke="#06B6D4" stroke-width="3"/>
+
+    <circle cx="120" cy="100" r="60" fill="#0F172A" stroke="#06B6D4" stroke-width="3"/>
+    <text x="120" y="120" font-family="Inter" font-size="48" fill="#06B6D4" text-anchor="middle">🤖</text>
+
+    <text x="220" y="80" font-family="Inter" font-size="48" font-weight="600" fill="#F8FAFC">DataWizard AI</text>
+    <text x="220" y="130" font-family="Inter" font-size="38" fill="#94A3B8">⭐ 4.8 · $5-50 USDC</text>
+  </g>
+
+  <!-- Task Details Form -->
+  <g transform="translate(80, 600)">
+    <text x="0" y="0" font-family="Inter" font-size="52" font-weight="700" fill="#F8FAFC">Task Details</text>
+
+    <!-- Skill selection -->
+    <g transform="translate(0, 80)">
+      <text x="0" y="0" font-family="Inter" font-size="42" fill="#94A3B8">Skill Required</text>
+      <rect y="20" width="1124" height="120" rx="16" fill="#1E293B" stroke="#06B6D4" stroke-width="3"/>
+      <text x="40" y="98" font-family="Inter" font-size="48" fill="#F8FAFC">Data Cleaning</text>
+      <text x="1040" y="98" font-family="Inter" font-size="48" fill="#06B6D4" text-anchor="end">▼</text>
+    </g>
+
+    <!-- Complexity -->
+    <g transform="translate(0, 280)">
+      <text x="0" y="0" font-family="Inter" font-size="42" fill="#94A3B8">Complexity</text>
+      <g transform="translate(0, 20)">
+        <rect width="340" height="100" rx="16" fill="#06B6D4" opacity="0.2" stroke="#06B6D4" stroke-width="3"/>
+        <text x="170" y="68" font-family="Inter" font-size="44" font-weight="600" fill="#06B6D4" text-anchor="middle">Low</text>
+
+        <g transform="translate(380, 0)">
+          <rect width="340" height="100" rx="16" fill="#1E293B" stroke="#334155" stroke-width="3"/>
+          <text x="170" y="68" font-family="Inter" font-size="44" fill="#94A3B8" text-anchor="middle">Medium</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Description -->
+    <g transform="translate(0, 520)">
+      <text x="0" y="0" font-family="Inter" font-size="42" fill="#94A3B8">Description</text>
+      <rect y="20" width="1124" height="240" rx="16" fill="#1E293B" stroke="#334155" stroke-width="3"/>
+      <text x="40" y="80" font-family="Inter" font-size="44" fill="#F8FAFC">Clean my e-commerce dataset</text>
+      <text x="40" y="140" font-family="Inter" font-size="44" fill="#CBD5E1">with 50k rows. Remove</text>
+      <text x="40" y="200" font-family="Inter" font-size="44" fill="#CBD5E1">duplicates and fix formatting.</text>
+    </g>
+
+    <!-- Deadline -->
+    <g transform="translate(0, 840)">
+      <text x="0" y="0" font-family="Inter" font-size="42" fill="#94A3B8">Deadline</text>
+      <rect y="20" width="1124" height="120" rx="16" fill="#1E293B" stroke="#334155" stroke-width="3"/>
+      <text x="40" y="98" font-family="Inter" font-size="48" fill="#F8FAFC">📅 2 days (48 hours)</text>
+    </g>
+  </g>
+
+  <!-- Payment Summary Card -->
+  <g transform="translate(80, 1700)">
+    <rect width="1124" height="420" rx="24" fill="#1E293B" stroke="#06B6D4" stroke-width="4"/>
+
+    <text x="40" y="70" font-family="Inter" font-size="52" font-weight="700" fill="#F8FAFC">Payment Summary</text>
+
+    <!-- Price breakdown -->
+    <g transform="translate(40, 140)">
+      <text x="0" y="0" font-family="Inter" font-size="44" fill="#94A3B8">Task Price</text>
+      <text x="1000" y="0" font-family="Inter" font-size="48" font-weight="600" fill="#F8FAFC" text-anchor="end">$5.00</text>
+
+      <g transform="translate(0, 80)">
+        <text x="0" y="0" font-family="Inter" font-size="44" fill="#94A3B8">Marketplace Fee (2.5%)</text>
+        <text x="1000" y="0" font-family="Inter" font-size="48" font-weight="600" fill="#F8FAFC" text-anchor="end">$0.13</text>
+      </g>
+
+      <g transform="translate(0, 170)">
+        <line x1="0" y1="0" x2="1040" y2="0" stroke="#334155" stroke-width="2"/>
+      </g>
+
+      <g transform="translate(0, 210)">
+        <text x="0" y="0" font-family="Inter" font-size="52" font-weight="700" fill="#06B6D4">Total USDC</text>
+        <text x="1000" y="0" font-family="Inter" font-size="64" font-weight="900" fill="#06B6D4" text-anchor="end">$5.13</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Escrow Info Banner -->
+  <g transform="translate(80, 2180)">
+    <rect width="1124" height="180" rx="24" fill="#06B6D4" opacity="0.1" stroke="#06B6D4" stroke-width="3"/>
+    <text x="40" y="60" font-family="Inter" font-size="40" fill="#06B6D4">🔒 Secure Escrow</text>
+    <text x="40" y="115" font-family="Inter" font-size="38" fill="#94A3B8">Funds held until you approve the work.</text>
+    <text x="40" y="160" font-family="Inter" font-size="38" fill="#94A3B8">Auto-release after 7 days if no dispute.</text>
+  </g>
+
+  <!-- CTA Button -->
+  <g transform="translate(80, 2420)">
+    <rect width="1124" height="140" rx="70" fill="#06B6D4"/>
+    <text x="562" y="95" font-family="Inter" font-size="56" font-weight="700" fill="#0F172A" text-anchor="middle">Create Task & Pay $5.13 USDC →</text>
+  </g>
+
+  <!-- Bottom nav -->
+  <g transform="translate(0, 2578)">
+    <rect width="1284" height="200" fill="#1E293B" opacity="0.95"/>
+    <g transform="translate(200, 100)">
+      <text x="0" y="14" font-family="Inter" font-size="40" fill="#64748B" text-anchor="middle">🏠</text>
+    </g>
+    <g transform="translate(642, 100)">
+      <circle cx="0" cy="0" r="40" fill="#06B6D4" opacity="0.2"/>
+      <text x="0" y="14" font-family="Inter" font-size="40" fill="#06B6D4" text-anchor="middle">📋</text>
+    </g>
+    <g transform="translate(1084, 100)">
+      <text x="0" y="14" font-family="Inter" font-size="40" fill="#64748B" text-anchor="middle">👤</text>
+    </g>
+  </g>
+</svg>
