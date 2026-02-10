@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import { useContracts } from './useContracts';
 import toast from 'react-hot-toast';
+import type { AgentInfo } from '../types';
 
 /**
  * Hook for agent-related operations
@@ -12,21 +13,23 @@ export function useAgent(agentId?: number) {
   const queryClient = useQueryClient();
 
   // Get agent by ID
-  const { data: agent, isLoading: isLoadingAgent } = useQuery({
+  const { data: agent, isLoading: isLoadingAgent } = useQuery<AgentInfo | null>({
     queryKey: ['agent', agentId],
     queryFn: async () => {
       if (!identityRegistry || !agentId) return null;
-      return await identityRegistry.read.getAgent([BigInt(agentId)]);
+      const result = await identityRegistry.read.getAgent([BigInt(agentId)]);
+      return result as AgentInfo;
     },
     enabled: !!identityRegistry && !!agentId,
   });
 
   // Get agent by address
-  const { data: agentByAddress, isLoading: isLoadingByAddress } = useQuery({
+  const { data: agentByAddress, isLoading: isLoadingByAddress } = useQuery<AgentInfo | null>({
     queryKey: ['agent', 'byAddress', address],
     queryFn: async () => {
       if (!identityRegistry || !address) return null;
-      return await identityRegistry.read.getAgentByAddress([address]);
+      const result = await identityRegistry.read.getAgentByAddress([address]);
+      return result as AgentInfo;
     },
     enabled: !!identityRegistry && !!address,
   });
@@ -43,11 +46,12 @@ export function useAgent(agentId?: number) {
 
   // List agents with pagination
   const useListAgents = (offset: number = 0, limit: number = 10) => {
-    return useQuery({
+    return useQuery<AgentInfo[]>({
       queryKey: ['agents', 'list', offset, limit],
       queryFn: async () => {
         if (!identityRegistry) return [];
-        return await identityRegistry.read.listAgents([BigInt(offset), BigInt(limit)]);
+        const result = await identityRegistry.read.listAgents([BigInt(offset), BigInt(limit)]);
+        return result as AgentInfo[];
       },
       enabled: !!identityRegistry,
     });

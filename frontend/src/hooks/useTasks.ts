@@ -3,6 +3,7 @@ import { useAccount } from 'wagmi';
 import { useContracts } from './useContracts';
 import { parseUnits } from 'viem';
 import toast from 'react-hot-toast';
+import type { Task } from '../types';
 
 /**
  * Hook for task-related operations
@@ -14,11 +15,12 @@ export function useTasks() {
 
   // Get task by ID
   const useTask = (taskId?: `0x${string}`) => {
-    return useQuery({
+    return useQuery<Task | null>({
       queryKey: ['task', taskId],
       queryFn: async () => {
         if (!agentBazaar || !taskId) return null;
-        return await agentBazaar.read.getTask([taskId]);
+        const result = await agentBazaar.read.getTask([taskId]);
+        return result as Task;
       },
       enabled: !!agentBazaar && !!taskId,
     });
@@ -26,11 +28,12 @@ export function useTasks() {
 
   // Get tasks by agent
   const useTasksByAgent = (agentId?: number) => {
-    return useQuery({
+    return useQuery<Task[]>({
       queryKey: ['tasks', 'agent', agentId],
       queryFn: async () => {
         if (!agentBazaar || !agentId) return [];
-        return await agentBazaar.read.getTasksByAgent([BigInt(agentId)]);
+        const result = await agentBazaar.read.getTasksByAgent([BigInt(agentId)]);
+        return result as Task[];
       },
       enabled: !!agentBazaar && !!agentId,
     });
@@ -38,22 +41,24 @@ export function useTasks() {
 
   // Get tasks by client
   const useTasksByClient = (clientAddress?: `0x${string}`) => {
-    return useQuery({
+    return useQuery<Task[]>({
       queryKey: ['tasks', 'client', clientAddress],
       queryFn: async () => {
         if (!agentBazaar || !clientAddress) return [];
-        return await agentBazaar.read.getTasksByClient([clientAddress]);
+        const result = await agentBazaar.read.getTasksByClient([clientAddress]);
+        return result as Task[];
       },
       enabled: !!agentBazaar && !!clientAddress,
     });
   };
 
   // Get USDC allowance
-  const { data: usdcAllowance } = useQuery({
+  const { data: usdcAllowance } = useQuery<bigint>({
     queryKey: ['usdc', 'allowance', address],
     queryFn: async () => {
       if (!usdc || !address || !agentBazaar) return 0n;
-      return await usdc.read.allowance([address, agentBazaar.address as `0x${string}`]);
+      const result = await usdc.read.allowance([address, agentBazaar.address as `0x${string}`]);
+      return result as bigint;
     },
     enabled: !!usdc && !!address && !!agentBazaar,
   });

@@ -2,6 +2,7 @@ import { useAgent } from '../../hooks';
 import { AgentCard } from './AgentCard';
 import { LoadingSpinner, EmptyState } from '../Common';
 import { useState } from 'react';
+import type { AgentInfo } from '../../types';
 
 export function AgentList() {
   const [offset, setOffset] = useState(0);
@@ -44,7 +45,7 @@ export function AgentList() {
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {agents.map((agent: any) => (
+        {agents.map((agent: AgentInfo) => (
           <AgentCard key={agent.agentId.toString()} agent={agent} />
         ))}
       </div>

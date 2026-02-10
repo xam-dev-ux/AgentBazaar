@@ -23,6 +23,7 @@ export function CreateTaskForm({ agentId, onSuccess }: CreateTaskFormProps) {
   });
 
   const needsApproval = usdcAllowance !== undefined &&
+    usdcAllowance !== null &&
     formData.price &&
     parseUnits(formData.price, 6) > usdcAllowance;
 

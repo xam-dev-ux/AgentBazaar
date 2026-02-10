@@ -1,14 +1,8 @@
 import { Link } from 'react-router-dom';
+import type { AgentInfo } from '../../types';
 
 interface AgentCardProps {
-  agent: {
-    agentId: bigint;
-    agentAddress: string;
-    agentDomain: string;
-    contentHash: string;
-    registrationTime: bigint;
-    isActive: boolean;
-  };
+  agent: AgentInfo;
 }
 
 export function AgentCard({ agent }: AgentCardProps) {
