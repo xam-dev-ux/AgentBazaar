@@ -2,12 +2,12 @@ import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { getContract } from 'viem';
 import { getContractAddresses } from '../config/contracts';
 
-// Import ABIs (from generated TypeScript files)
-import IdentityRegistryArtifact from '../abis/contracts/core/IdentityRegistry.sol/IdentityRegistry.json';
-import ReputationRegistryArtifact from '../abis/contracts/core/ReputationRegistry.sol/ReputationRegistry.json';
-import ValidationRegistryArtifact from '../abis/contracts/core/ValidationRegistry.sol/ValidationRegistry.json';
-import AgentBazaarArtifact from '../abis/contracts/marketplace/AgentBazaar.sol/AgentBazaar.json';
-import ERC20Artifact from '../abis/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json';
+// Import ABIs (from JSON artifacts)
+import IdentityRegistryArtifact from '../abis-json/contracts/core/IdentityRegistry.json';
+import ReputationRegistryArtifact from '../abis-json/contracts/core/ReputationRegistry.json';
+import ValidationRegistryArtifact from '../abis-json/contracts/core/ValidationRegistry.json';
+import AgentBazaarArtifact from '../abis-json/contracts/marketplace/AgentBazaar.json';
+import IERC20Artifact from '../abis-json/@openzeppelin/contracts/token/ERC20/IERC20.json';
 
 /**
  * Hook to get contract instances
@@ -95,7 +95,7 @@ export function useContracts() {
   const usdc = publicClient
     ? getContract({
         address: addresses.usdc as `0x${string}`,
-        abi: ERC20Artifact.abi,
+        abi: IERC20Artifact.abi,
         client: publicClient,
       })
     : null;
@@ -104,7 +104,7 @@ export function useContracts() {
   const usdcWrite = walletClient
     ? getContract({
         address: addresses.usdc as `0x${string}`,
-        abi: ERC20Artifact.abi,
+        abi: IERC20Artifact.abi,
         client: walletClient,
       })
     : null;
