@@ -12,10 +12,6 @@
     --color-border: #333333;
   }
 
-  * {
-    @apply border-border;
-  }
-
   body {
     @apply bg-[#0A0A0A] text-white antialiased;
     font-family: 'Inter', system-ui, sans-serif;
