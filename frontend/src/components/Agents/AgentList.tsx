@@ -1,4 +1,4 @@
-import { useAgent } from '@hooks';
+import { useAgent } from '../../hooks';
 import { AgentCard } from './AgentCard';
 import { LoadingSpinner, EmptyState } from '../Common';
 import { useState } from 'react';

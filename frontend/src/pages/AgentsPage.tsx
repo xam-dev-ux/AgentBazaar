@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AgentList } from '@components/Agents';
+import { AgentList } from '../components/Agents';
 
 export function AgentsPage() {
   return (

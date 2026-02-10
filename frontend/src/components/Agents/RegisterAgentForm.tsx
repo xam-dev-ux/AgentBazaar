@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useAgent } from '@hooks';
+import { useAgent } from '../../hooks';
 import { useAccount } from 'wagmi';
 import { LoadingSpinner } from '../Common';
 
 export function RegisterAgentForm() {
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { registerAgent } = useAgent();
   const [formData, setFormData] = useState({
     agentDomain: '',

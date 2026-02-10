@@ -1,11 +1,11 @@
 import { useAccount } from 'wagmi';
-import { useAgent } from '@hooks';
-import { RegisterAgentForm } from '@components/Agents';
-import { LoadingSpinner } from '@components/Common';
+import { useAgent } from '../hooks';
+import { RegisterAgentForm } from '../components/Agents';
+import { LoadingSpinner } from '../components/Common';
 import { Link } from 'react-router-dom';
 
 export function DashboardPage() {
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { agentByAddress, isLoadingByAddress } = useAgent();
 
   if (!isConnected) {

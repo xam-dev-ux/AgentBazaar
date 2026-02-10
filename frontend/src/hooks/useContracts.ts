@@ -1,13 +1,13 @@
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { getContract } from 'viem';
-import { getContractAddresses } from '@config/contracts';
+import { getContractAddresses } from '../config/contracts';
 
-// Import ABIs
-import IdentityRegistryABI from '@abis/contracts/core/IdentityRegistry.sol/IdentityRegistry.json';
-import ReputationRegistryABI from '@abis/contracts/core/ReputationRegistry.sol/ReputationRegistry.json';
-import ValidationRegistryABI from '@abis/contracts/core/ValidationRegistry.sol/ValidationRegistry.json';
-import AgentBazaarABI from '@abis/contracts/marketplace/AgentBazaar.sol/AgentBazaar.json';
-import USDCABI from '@abis/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json';
+// Import ABIs (from generated TypeScript files)
+import IdentityRegistryArtifact from '../abis/contracts/core/IdentityRegistry.sol/IdentityRegistry.json';
+import ReputationRegistryArtifact from '../abis/contracts/core/ReputationRegistry.sol/ReputationRegistry.json';
+import ValidationRegistryArtifact from '../abis/contracts/core/ValidationRegistry.sol/ValidationRegistry.json';
+import AgentBazaarArtifact from '../abis/contracts/marketplace/AgentBazaar.sol/AgentBazaar.json';
+import ERC20Artifact from '../abis/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json';
 
 /**
  * Hook to get contract instances
@@ -23,7 +23,7 @@ export function useContracts() {
   const identityRegistry = publicClient
     ? getContract({
         address: addresses.identityRegistry as `0x${string}`,
-        abi: IdentityRegistryABI.abi,
+        abi: IdentityRegistryArtifact.abi,
         client: publicClient,
       })
     : null;
@@ -32,7 +32,7 @@ export function useContracts() {
   const identityRegistryWrite = walletClient
     ? getContract({
         address: addresses.identityRegistry as `0x${string}`,
-        abi: IdentityRegistryABI.abi,
+        abi: IdentityRegistryArtifact.abi,
         client: walletClient,
       })
     : null;
@@ -41,7 +41,7 @@ export function useContracts() {
   const reputationRegistry = publicClient
     ? getContract({
         address: addresses.reputationRegistry as `0x${string}`,
-        abi: ReputationRegistryABI.abi,
+        abi: ReputationRegistryArtifact.abi,
         client: publicClient,
       })
     : null;
@@ -50,7 +50,7 @@ export function useContracts() {
   const reputationRegistryWrite = walletClient
     ? getContract({
         address: addresses.reputationRegistry as `0x${string}`,
-        abi: ReputationRegistryABI.abi,
+        abi: ReputationRegistryArtifact.abi,
         client: walletClient,
       })
     : null;
@@ -59,7 +59,7 @@ export function useContracts() {
   const validationRegistry = publicClient
     ? getContract({
         address: addresses.validationRegistry as `0x${string}`,
-        abi: ValidationRegistryABI.abi,
+        abi: ValidationRegistryArtifact.abi,
         client: publicClient,
       })
     : null;
@@ -68,7 +68,7 @@ export function useContracts() {
   const validationRegistryWrite = walletClient
     ? getContract({
         address: addresses.validationRegistry as `0x${string}`,
-        abi: ValidationRegistryABI.abi,
+        abi: ValidationRegistryArtifact.abi,
         client: walletClient,
       })
     : null;
@@ -77,7 +77,7 @@ export function useContracts() {
   const agentBazaar = publicClient
     ? getContract({
         address: addresses.agentBazaar as `0x${string}`,
-        abi: AgentBazaarABI.abi,
+        abi: AgentBazaarArtifact.abi,
         client: publicClient,
       })
     : null;
@@ -86,7 +86,7 @@ export function useContracts() {
   const agentBazaarWrite = walletClient
     ? getContract({
         address: addresses.agentBazaar as `0x${string}`,
-        abi: AgentBazaarABI.abi,
+        abi: AgentBazaarArtifact.abi,
         client: walletClient,
       })
     : null;
@@ -95,7 +95,7 @@ export function useContracts() {
   const usdc = publicClient
     ? getContract({
         address: addresses.usdc as `0x${string}`,
-        abi: USDCABI.abi,
+        abi: ERC20Artifact.abi,
         client: publicClient,
       })
     : null;
@@ -104,7 +104,7 @@ export function useContracts() {
   const usdcWrite = walletClient
     ? getContract({
         address: addresses.usdc as `0x${string}`,
-        abi: USDCABI.abi,
+        abi: ERC20Artifact.abi,
         client: walletClient,
       })
     : null;

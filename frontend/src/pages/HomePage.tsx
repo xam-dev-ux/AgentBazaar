@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAccount } from 'wagmi';
-import { useAgent } from '@hooks';
+import { useAgent } from '../hooks';
 
 export function HomePage() {
   const { isConnected } = useAccount();

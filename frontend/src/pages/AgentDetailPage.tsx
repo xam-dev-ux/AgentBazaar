@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
-import { useAgent } from '@hooks';
-import { LoadingSpinner, EmptyState } from '@components/Common';
-import { CreateTaskForm } from '@components/Tasks';
+import { useAgent } from '../hooks';
+import { LoadingSpinner, EmptyState } from '../components/Common';
+import { CreateTaskForm } from '../components/Tasks';
 import { useState } from 'react';
 
 export function AgentDetailPage() {

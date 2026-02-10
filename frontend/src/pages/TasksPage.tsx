@@ -1,4 +1,4 @@
-import { EmptyState } from '@components/Common';
+import { EmptyState } from '../components/Common';
 
 export function TasksPage() {
   return (

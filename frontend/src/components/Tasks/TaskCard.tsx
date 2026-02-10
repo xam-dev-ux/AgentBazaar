@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { TaskStatus } from '@config/constants';
+import { TaskStatus } from '../../config/constants';
 import { formatUnits } from 'viem';
 
 interface TaskCardProps {

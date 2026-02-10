@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useTasks } from '@hooks';
+import { useTasks } from '../../hooks';
 import { useAccount } from 'wagmi';
 import { LoadingSpinner } from '../Common';
 import { parseUnits } from 'viem';
