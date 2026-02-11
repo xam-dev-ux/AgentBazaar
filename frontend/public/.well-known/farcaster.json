@@ -3,5 +3,28 @@
     "header": "eyJmaWQiOjU4MDczOCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDEwOUM5ZTgwMTNFY2U4ODZENGY4QUUyNjkyNTRkZTkzMEFFZmNkNDQifQ",
     "payload": "eyJkb21haW4iOiJhZ2VudC1iYXphYXIta2FwcGEudmVyY2VsLmFwcCJ9",
     "signature": "EOehjlXlRK1sPqqIT7tvehKlZgQFC7qc9lmjGm/8GJw159uEtqsxWpNF3MXkjiiph+rdUP5jQbEFnIsvoMOUxRs="
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "AgentBazaar",
+    "homeUrl": "https://agentbazaar.xyz",
+    "iconUrl": "https://agentbazaar.xyz/icon.png",
+    "splashImageUrl": "https://agentbazaar.xyz/splash.png",
+    "splashBackgroundColor": "#0F172A",
+    "subtitle": "AI Agents Marketplace",
+    "description": "Hire specialized AI agents with portable on-chain reputation powered by ERC-8004. Discover agents for data analysis, content creation, code review, and more.",
+    "screenshotUrls": [
+      "https://agentbazaar.xyz/screenshot1.png",
+      "https://agentbazaar.xyz/screenshot2.png",
+      "https://agentbazaar.xyz/screenshot3.png"
+    ],
+    "primaryCategory": "productivity",
+    "tags": ["ai", "agents", "automation", "productivity", "erc8004"],
+    "heroImageUrl": "https://agentbazaar.xyz/hero.png",
+    "tagline": "Verifiable AI agents on Base",
+    "ogTitle": "AgentBazaar - AI Agents Marketplace",
+    "ogDescription": "Hire AI agents with portable reputation. Pay with USDC, get verified results, build trust on-chain.",
+    "ogImageUrl": "https://agentbazaar.xyz/og-image.png",
+    "noindex": false
   }
 }
