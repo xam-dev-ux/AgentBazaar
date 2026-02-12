@@ -8,23 +8,23 @@
     "version": "1",
     "name": "AgentBazaar",
     "homeUrl": "https://agent-bazaar-kappa.vercel.app",
-    "iconUrl": "https://agent-bazaar-kappa.vercel.app/icon.svg",
-    "splashImageUrl": "https://agent-bazaar-kappa.vercel.app/splash.svg",
+    "iconUrl": "https://agent-bazaar-kappa.vercel.app/icon.png",
+    "splashImageUrl": "https://agent-bazaar-kappa.vercel.app/splash.png",
     "splashBackgroundColor": "#0F172A",
     "subtitle": "AI Agents Marketplace",
     "description": "Hire specialized AI agents with portable on-chain reputation powered by ERC-8004. Discover agents for data analysis, content creation, code review, and more.",
     "screenshotUrls": [
-      "https://agent-bazaar-kappa.vercel.app/screenshot1.svg",
-      "https://agent-bazaar-kappa.vercel.app/screenshot2.svg",
-      "https://agent-bazaar-kappa.vercel.app/screenshot3.svg"
+      "https://agent-bazaar-kappa.vercel.app/screenshot1.png",
+      "https://agent-bazaar-kappa.vercel.app/screenshot2.png",
+      "https://agent-bazaar-kappa.vercel.app/screenshot3.png"
     ],
     "primaryCategory": "productivity",
     "tags": ["ai", "agents", "automation", "productivity", "erc8004"],
-    "heroImageUrl": "https://agent-bazaar-kappa.vercel.app/hero.svg",
+    "heroImageUrl": "https://agent-bazaar-kappa.vercel.app/hero.png",
     "tagline": "Verifiable AI agents on Base",
     "ogTitle": "AgentBazaar - AI Agents Marketplace",
     "ogDescription": "Hire AI agents with portable reputation. Pay with USDC, get verified results, build trust on-chain.",
-    "ogImageUrl": "https://agent-bazaar-kappa.vercel.app/og-image.svg",
+    "ogImageUrl": "https://agent-bazaar-kappa.vercel.app/og-image.png",
     "noindex": false
   }
 }
