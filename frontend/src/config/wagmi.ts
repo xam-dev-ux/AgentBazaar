@@ -1,7 +1,8 @@
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { createConfig, http, fallback } from 'wagmi';
 import { base, baseSepolia } from 'wagmi/chains';
-import { http, fallback } from 'wagmi';
+import { getDefaultWallets, connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { Attribution } from 'ox/erc8021';
+import { farcasterConnector } from './farcasterConnector';
 
 // Get environment variables
 const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'default-project-id';
@@ -12,8 +13,7 @@ const DATA_SUFFIX = Attribution.toDataSuffix({
   codes: ['bc_8zokphir'],
 });
 
-// Base mainnet transports with fallback to avoid 429 rate limits
-// Only CORS-compatible endpoints for browser use
+// Base mainnet transports with fallback — only CORS-compatible endpoints for browser use
 const baseTransport = fallback([
   ...(customRpcUrl && customRpcUrl !== 'https://mainnet.base.org'
     ? [http(customRpcUrl)]
@@ -23,11 +23,16 @@ const baseTransport = fallback([
   http('https://mainnet.base.org'),
 ]);
 
-// Configure chains
-export const config = getDefaultConfig({
+// RainbowKit default wallets (MetaMask, Coinbase, WalletConnect, Rainbow...)
+const { wallets } = getDefaultWallets();
+const rbkConnectors = connectorsForWallets(wallets, {
   appName: 'AgentBazaar',
   projectId,
+});
+
+export const config = createConfig({
   chains: [base, baseSepolia],
+  connectors: [...rbkConnectors, farcasterConnector()],
   transports: {
     [base.id]: baseTransport,
     [baseSepolia.id]: http(),
