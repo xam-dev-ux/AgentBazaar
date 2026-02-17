@@ -4,8 +4,10 @@ import { useAccount } from 'wagmi';
 import { LoadingSpinner } from '../Common';
 
 export function RegisterAgentForm() {
-  const { isConnected } = useAccount();
+  const { isConnected, address, chainId } = useAccount();
   const { registerAgent } = useAgent();
+
+  console.log('[RegisterForm] render — isConnected:', isConnected, '| address:', address, '| chainId:', chainId, '| isPending:', registerAgent.isPending, '| status:', registerAgent.status);
   const [formData, setFormData] = useState({
     agentDomain: '',
     contentHash: '',
@@ -114,6 +116,7 @@ export function RegisterAgentForm() {
           type="submit"
           disabled={!isConnected || registerAgent.isPending}
           className="btn btn-primary w-full flex items-center justify-center gap-2"
+          onClick={() => console.log('[RegisterForm] button onClick — disabled?', !isConnected || registerAgent.isPending, '| isConnected:', isConnected, '| isPending:', registerAgent.isPending)}
         >
           {registerAgent.isPending ? (
             <>
