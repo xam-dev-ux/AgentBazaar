@@ -15,7 +15,8 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       retry: 1,
-      staleTime: 30000, // 30 seconds
+      staleTime: 60000, // 60 seconds - reduces RPC calls
+      gcTime: 300000, // 5 minutes - keep data in cache longer
     },
   },
 });
