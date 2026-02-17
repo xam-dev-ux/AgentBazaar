@@ -12,14 +12,14 @@ const DATA_SUFFIX = Attribution.toDataSuffix({
   codes: ['bc_8zokphir'],
 });
 
-// Base mainnet transports with fallback to avoid 429 rate limits on the public node
+// Base mainnet transports with fallback to avoid 429 rate limits
+// Only CORS-compatible endpoints for browser use
 const baseTransport = fallback([
   ...(customRpcUrl && customRpcUrl !== 'https://mainnet.base.org'
     ? [http(customRpcUrl)]
     : []),
-  http('https://base.llamarpc.com'),
+  http('https://rpc.ankr.com/base'),
   http('https://base-rpc.publicnode.com'),
-  http('https://1rpc.io/base'),
   http('https://mainnet.base.org'),
 ]);
 
