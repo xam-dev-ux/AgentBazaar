@@ -14,6 +14,7 @@ export function RegisterAgentForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('[RegisterAgent] submit clicked, isConnected:', isConnected, 'formData:', formData);
 
     if (!isConnected) {
       alert('Please connect your wallet first');
@@ -21,20 +22,21 @@ export function RegisterAgentForm() {
     }
 
     try {
-      await registerAgent.mutateAsync({
+      console.log('[RegisterAgent] calling mutateAsync...');
+      const result = await registerAgent.mutateAsync({
         agentDomain: formData.agentDomain,
         contentHash: formData.contentHash as `0x${string}`,
         tokenURI: formData.tokenURI,
       });
+      console.log('[RegisterAgent] mutateAsync resolved, tx hash:', result);
 
-      // Reset form
       setFormData({
         agentDomain: '',
         contentHash: '',
         tokenURI: '',
       });
     } catch (error) {
-      console.error('Error registering agent:', error);
+      console.error('[RegisterAgent] mutateAsync threw:', error);
     }
   };
 

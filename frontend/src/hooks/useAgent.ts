@@ -68,13 +68,19 @@ export function useAgent(agentId?: number) {
       contentHash: `0x${string}`;
       tokenURI: string;
     }) => {
+      console.log('[useAgent] registerAgent mutationFn start');
+      console.log('[useAgent] identityRegistryWrite:', identityRegistryWrite);
+      console.log('[useAgent] address:', address);
+
       if (!identityRegistryWrite) throw new Error('Wallet not connected');
 
+      console.log('[useAgent] calling identityRegistryWrite.write.registerAgent...');
       const hash = await identityRegistryWrite.write.registerAgent([
         agentDomain,
         contentHash,
         tokenURI,
       ]);
+      console.log('[useAgent] registerAgent tx hash:', hash);
 
       return hash;
     },
@@ -84,6 +90,7 @@ export function useAgent(agentId?: number) {
       queryClient.invalidateQueries({ queryKey: ['agents'] });
     },
     onError: (error: Error) => {
+      console.error('[useAgent] registerAgent onError:', error);
       toast.error(`Failed to register agent: ${error.message}`);
     },
   });
