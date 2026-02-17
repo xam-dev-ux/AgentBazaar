@@ -17,7 +17,6 @@ export function useContracts() {
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
 
-  console.log('[useContracts] chainId:', chainId, '| publicClient:', !!publicClient, '| walletClient:', !!walletClient);
 
   const addresses = getContractAddresses(chainId || 8453);
 

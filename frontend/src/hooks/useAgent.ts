@@ -1,16 +1,19 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAccount } from 'wagmi';
+import { useAccount, useWriteContract } from 'wagmi';
 import { useContracts } from './useContracts';
 import toast from 'react-hot-toast';
 import type { AgentInfo } from '../types';
+
+import IdentityRegistryArtifact from '../abis-json/contracts/core/IdentityRegistry.json';
 
 /**
  * Hook for agent-related operations
  */
 export function useAgent(agentId?: number) {
   const { address } = useAccount();
-  const { identityRegistry, identityRegistryWrite } = useContracts();
+  const { identityRegistry, addresses } = useContracts();
   const queryClient = useQueryClient();
+  const { writeContractAsync } = useWriteContract();
 
   // Get agent by ID
   const { data: agent, isLoading: isLoadingAgent } = useQuery<AgentInfo | null>({
@@ -57,7 +60,8 @@ export function useAgent(agentId?: number) {
     });
   };
 
-  // Register agent mutation
+  // Register agent mutation — uses wagmi's useWriteContract which properly
+  // triggers the wallet popup and rejects cleanly on user cancel.
   const registerAgent = useMutation({
     mutationFn: async ({
       agentDomain,
@@ -68,29 +72,27 @@ export function useAgent(agentId?: number) {
       contentHash: `0x${string}`;
       tokenURI: string;
     }) => {
-      console.log('[useAgent] registerAgent mutationFn start');
-      console.log('[useAgent] identityRegistryWrite:', identityRegistryWrite);
-      console.log('[useAgent] address:', address);
+      console.log('[useAgent] registerAgent start', { agentDomain, contentHash, tokenURI });
+      console.log('[useAgent] contract address:', addresses.identityRegistry);
 
-      if (!identityRegistryWrite) throw new Error('Wallet not connected');
+      const hash = await writeContractAsync({
+        address: addresses.identityRegistry as `0x${string}`,
+        abi: IdentityRegistryArtifact.abi,
+        functionName: 'registerAgent',
+        args: [agentDomain, contentHash, tokenURI],
+      });
 
-      console.log('[useAgent] calling identityRegistryWrite.write.registerAgent...');
-      const hash = await identityRegistryWrite.write.registerAgent([
-        agentDomain,
-        contentHash,
-        tokenURI,
-      ]);
       console.log('[useAgent] registerAgent tx hash:', hash);
-
       return hash;
     },
-    onSuccess: () => {
+    onSuccess: (hash) => {
+      console.log('[useAgent] registerAgent success, hash:', hash);
       toast.success('Agent registered successfully!');
       queryClient.invalidateQueries({ queryKey: ['agent'] });
       queryClient.invalidateQueries({ queryKey: ['agents'] });
     },
     onError: (error: Error) => {
-      console.error('[useAgent] registerAgent onError:', error);
+      console.error('[useAgent] registerAgent error:', error);
       toast.error(`Failed to register agent: ${error.message}`);
     },
   });
@@ -106,14 +108,12 @@ export function useAgent(agentId?: number) {
       newAgentDomain: string;
       newContentHash: `0x${string}`;
     }) => {
-      if (!identityRegistryWrite) throw new Error('Wallet not connected');
-
-      const hash = await identityRegistryWrite.write.updateAgentCard([
-        BigInt(agentId),
-        newAgentDomain,
-        newContentHash,
-      ]);
-
+      const hash = await writeContractAsync({
+        address: addresses.identityRegistry as `0x${string}`,
+        abi: IdentityRegistryArtifact.abi,
+        functionName: 'updateAgentCard',
+        args: [BigInt(agentId), newAgentDomain, newContentHash],
+      });
       return hash;
     },
     onSuccess: () => {
@@ -128,10 +128,12 @@ export function useAgent(agentId?: number) {
   // Deactivate agent mutation
   const deactivateAgent = useMutation({
     mutationFn: async (agentId: number) => {
-      if (!identityRegistryWrite) throw new Error('Wallet not connected');
-
-      const hash = await identityRegistryWrite.write.deactivateAgent([BigInt(agentId)]);
-
+      const hash = await writeContractAsync({
+        address: addresses.identityRegistry as `0x${string}`,
+        abi: IdentityRegistryArtifact.abi,
+        functionName: 'deactivateAgent',
+        args: [BigInt(agentId)],
+      });
       return hash;
     },
     onSuccess: () => {
