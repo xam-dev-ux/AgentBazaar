@@ -21,7 +21,8 @@ export function DashboardPage() {
     );
   }
 
-  if (isLoadingByAddress) {
+  // Only block on true initial load (no data yet), not on background refetches
+  if (isLoadingByAddress && agentByAddress === undefined) {
     return (
       <div className="container mx-auto px-4 py-12">
         <LoadingSpinner size="lg" />

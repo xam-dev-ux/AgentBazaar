@@ -1,13 +1,18 @@
 import { useState } from 'react';
-import { useAgent } from '../../hooks';
-import { useAccount } from 'wagmi';
+import { useAccount, useWriteContract } from 'wagmi';
+import { useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import { LoadingSpinner } from '../Common';
+import { getContractAddresses } from '../../config/contracts';
+
+import IdentityRegistryArtifact from '../../abis-json/contracts/core/IdentityRegistry.json';
 
 export function RegisterAgentForm() {
-  const { isConnected, address, chainId } = useAccount();
-  const { registerAgent } = useAgent();
+  const { isConnected, chainId } = useAccount();
+  const { writeContractAsync, isPending } = useWriteContract();
+  const queryClient = useQueryClient();
+  const addresses = getContractAddresses(chainId || 8453);
 
-  console.log('[RegisterForm] render — isConnected:', isConnected, '| address:', address, '| chainId:', chainId, '| isPending:', registerAgent.isPending, '| status:', registerAgent.status);
   const [formData, setFormData] = useState({
     agentDomain: '',
     contentHash: '',
@@ -16,37 +21,29 @@ export function RegisterAgentForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('[RegisterAgent] submit clicked, isConnected:', isConnected, 'formData:', formData);
-
-    if (!isConnected) {
-      alert('Please connect your wallet first');
-      return;
-    }
+    console.log('[RegisterAgent] submit, formData:', formData);
 
     try {
-      console.log('[RegisterAgent] calling mutateAsync...');
-      const result = await registerAgent.mutateAsync({
-        agentDomain: formData.agentDomain,
-        contentHash: formData.contentHash as `0x${string}`,
-        tokenURI: formData.tokenURI,
+      console.log('[RegisterAgent] calling writeContractAsync...');
+      const hash = await writeContractAsync({
+        address: addresses.identityRegistry as `0x${string}`,
+        abi: IdentityRegistryArtifact.abi,
+        functionName: 'registerAgent',
+        args: [formData.agentDomain, formData.contentHash as `0x${string}`, formData.tokenURI],
       });
-      console.log('[RegisterAgent] mutateAsync resolved, tx hash:', result);
-
-      setFormData({
-        agentDomain: '',
-        contentHash: '',
-        tokenURI: '',
-      });
+      console.log('[RegisterAgent] tx hash:', hash);
+      toast.success('Agent registered successfully!');
+      queryClient.invalidateQueries({ queryKey: ['agent'] });
+      queryClient.invalidateQueries({ queryKey: ['agents'] });
+      setFormData({ agentDomain: '', contentHash: '', tokenURI: '' });
     } catch (error) {
-      console.error('[RegisterAgent] mutateAsync threw:', error);
+      console.error('[RegisterAgent] error:', error);
+      toast.error(`Failed to register agent: ${(error as Error).message}`);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -68,9 +65,7 @@ export function RegisterAgentForm() {
             className="input"
             required
           />
-          <p className="mt-1 text-xs text-gray-500">
-            IPFS link to your AgentCard JSON file
-          </p>
+          <p className="mt-1 text-xs text-gray-500">IPFS link to your AgentCard JSON file</p>
         </div>
 
         {/* Content Hash */}
@@ -106,19 +101,16 @@ export function RegisterAgentForm() {
             className="input"
             required
           />
-          <p className="mt-1 text-xs text-gray-500">
-            IPFS link to your agent's NFT metadata
-          </p>
+          <p className="mt-1 text-xs text-gray-500">IPFS link to your agent's NFT metadata</p>
         </div>
 
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={!isConnected || registerAgent.isPending}
+          disabled={!isConnected || isPending}
           className="btn btn-primary w-full flex items-center justify-center gap-2"
-          onClick={() => console.log('[RegisterForm] button onClick — disabled?', !isConnected || registerAgent.isPending, '| isConnected:', isConnected, '| isPending:', registerAgent.isPending)}
         >
-          {registerAgent.isPending ? (
+          {isPending ? (
             <>
               <LoadingSpinner size="sm" />
               Registering...
