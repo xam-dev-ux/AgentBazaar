@@ -25,7 +25,8 @@ export function CreateTaskForm({ agentId, onSuccess }: CreateTaskFormProps) {
   const needsApproval = usdcAllowance !== undefined &&
     usdcAllowance !== null &&
     formData.price &&
-    parseUnits(formData.price, 6) > usdcAllowance;
+    formData.price.trim() !== '' &&
+    parseUnits(formData.price.trim(), 6) > usdcAllowance;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,7 +76,9 @@ export function CreateTaskForm({ agentId, onSuccess }: CreateTaskFormProps) {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const value = e.target.type === 'number' ? parseFloat(e.target.value) : e.target.value;
+    const value = e.target.type === 'number' && e.target.name !== 'price'
+      ? parseFloat(e.target.value)
+      : e.target.value;
     setFormData({
       ...formData,
       [e.target.name]: value,
