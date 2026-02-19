@@ -1,12 +1,17 @@
 import { useAccount } from 'wagmi';
-import { useAgent } from '../hooks';
-import { RegisterAgentForm } from '../components/Agents';
+import { useAgent, useTasks } from '../hooks';
+import { RegisterAgentForm, ListAgentForm } from '../components/Agents';
 import { LoadingSpinner } from '../components/Common';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 export function DashboardPage() {
   const { isConnected } = useAccount();
   const { agentByAddress, isLoadingByAddress } = useAgent();
+  const { useAgentListing } = useTasks();
+  const agentId = agentByAddress?.agentId ? Number(agentByAddress.agentId) : undefined;
+  const { data: agentListing } = useAgentListing(agentId);
+  const [showListingForm, setShowListingForm] = useState(false);
 
   if (!isConnected) {
     return (
@@ -32,25 +37,57 @@ export function DashboardPage() {
 
   // User has an agent
   if (agentByAddress && agentByAddress.agentId > 0n) {
-    const agentId = agentByAddress.agentId.toString();
+    const agentIdStr = agentByAddress.agentId.toString();
+    const hasListing = agentListing && agentListing.agentId > 0n;
 
     return (
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold mb-8 gradient-text">Dashboard</h1>
 
+        {/* Marketplace Listing Warning */}
+        {!hasListing && !showListingForm && (
+          <div className="card mb-8 bg-yellow-500/10 border-yellow-500/20">
+            <h3 className="text-lg font-semibold text-yellow-500 mb-2">
+              Create Marketplace Listing
+            </h3>
+            <p className="text-gray-400 mb-4">
+              Your agent is registered but not listed in the marketplace yet.
+              Create a listing to allow clients to assign tasks to your agent.
+            </p>
+            <button
+              onClick={() => setShowListingForm(true)}
+              className="btn btn-primary"
+            >
+              Create Marketplace Listing
+            </button>
+          </div>
+        )}
+
+        {/* Listing Form */}
+        {showListingForm && !hasListing && (
+          <div className="mb-8">
+            <ListAgentForm
+              agentId={Number(agentByAddress.agentId)}
+              onSuccess={() => setShowListingForm(false)}
+            />
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="card text-center">
-            <div className="text-3xl font-bold text-primary-500">{agentId}</div>
+            <div className="text-3xl font-bold text-primary-500">{agentIdStr}</div>
             <div className="text-sm text-gray-400 mt-2">Agent ID</div>
           </div>
           <div className="card text-center">
             <div className="text-3xl font-bold text-green-500">
-              {agentByAddress.isActive ? 'Active' : 'Inactive'}
+              {hasListing ? 'Listed' : 'Not Listed'}
             </div>
-            <div className="text-sm text-gray-400 mt-2">Status</div>
+            <div className="text-sm text-gray-400 mt-2">Marketplace Status</div>
           </div>
           <div className="card text-center">
-            <div className="text-3xl font-bold text-blue-500">0</div>
+            <div className="text-3xl font-bold text-blue-500">
+              {hasListing ? agentListing.totalTasksCompleted.toString() : '0'}
+            </div>
             <div className="text-sm text-gray-400 mt-2">Completed Tasks</div>
           </div>
         </div>
@@ -61,7 +98,7 @@ export function DashboardPage() {
             <div className="space-y-3">
               <div>
                 <div className="text-sm text-gray-400">Agent ID</div>
-                <div className="font-mono">{agentId}</div>
+                <div className="font-mono">{agentIdStr}</div>
               </div>
               <div>
                 <div className="text-sm text-gray-400">Agent Address</div>
@@ -79,7 +116,7 @@ export function DashboardPage() {
               </div>
             </div>
             <Link
-              to={`/agents/${agentId}`}
+              to={`/agents/${agentIdStr}`}
               className="btn btn-outline w-full mt-6"
             >
               View Public Profile
@@ -89,12 +126,20 @@ export function DashboardPage() {
           <div className="card">
             <h2 className="text-2xl font-bold mb-4">Quick Actions</h2>
             <div className="space-y-3">
-              <Link to={`/agents/${agentId}`} className="btn btn-secondary w-full">
+              <Link to={`/agents/${agentIdStr}`} className="btn btn-secondary w-full">
                 View My Agent
               </Link>
               <Link to="/tasks" className="btn btn-secondary w-full">
                 Browse Tasks
               </Link>
+              {!hasListing && (
+                <button
+                  onClick={() => setShowListingForm(true)}
+                  className="btn btn-primary w-full"
+                >
+                  Create Marketplace Listing
+                </button>
+              )}
               <button className="btn btn-secondary w-full" disabled>
                 Update Agent Card
               </button>

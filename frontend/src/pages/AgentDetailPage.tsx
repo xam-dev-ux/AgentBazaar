@@ -10,10 +10,10 @@ export function AgentDetailPage() {
   const agentId = id ? parseInt(id) : undefined;
   const { agent, isLoadingAgent } = useAgent(agentId);
   const { useAgentListing } = useTasks();
-  const { data: agentListing, isLoading: isLoadingListing } = useAgentListing(agentId);
+  const { data: agentListing } = useAgentListing(agentId);
   const [showCreateTask, setShowCreateTask] = useState(false);
 
-  if (isLoadingAgent || isLoadingListing) {
+  if (isLoadingAgent) {
     return (
       <div className="container mx-auto px-4 py-12">
         <LoadingSpinner size="lg" />
@@ -21,7 +21,7 @@ export function AgentDetailPage() {
     );
   }
 
-  if (!agent || !agentId || !agentListing) {
+  if (!agent || !agentId) {
     return (
       <div className="container mx-auto px-4 py-12">
         <EmptyState
@@ -36,6 +36,9 @@ export function AgentDetailPage() {
       </div>
     );
   }
+
+  // Check if agent has a marketplace listing
+  const hasListing = agentListing && agentListing.agentId > 0n;
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -70,14 +73,18 @@ export function AgentDetailPage() {
                 <span className="text-gray-400">Owner:</span>{' '}
                 <span className="font-mono">{agent.agentAddress}</span>
               </div>
-              <div>
-                <span className="text-gray-400">Base Price:</span>{' '}
-                <span className="font-semibold text-green-400">{formatUnits(agentListing.basePrice, 6)} USDC</span>
-              </div>
-              <div>
-                <span className="text-gray-400">Category:</span>{' '}
-                <span>{agentListing.category || 'General'}</span>
-              </div>
+              {hasListing && (
+                <>
+                  <div>
+                    <span className="text-gray-400">Base Price:</span>{' '}
+                    <span className="font-semibold text-green-400">{formatUnits(agentListing.basePrice, 6)} USDC</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-400">Category:</span>{' '}
+                    <span>{agentListing.category || 'General'}</span>
+                  </div>
+                </>
+              )}
               <div>
                 <span className="text-gray-400">Registered:</span>{' '}
                 {new Date(Number(agent.registrationTime) * 1000).toLocaleDateString()}
@@ -85,17 +92,23 @@ export function AgentDetailPage() {
             </div>
           </div>
 
-          <button
-            onClick={() => setShowCreateTask(!showCreateTask)}
-            className="btn btn-primary"
-          >
-            Create Task
-          </button>
+          {hasListing ? (
+            <button
+              onClick={() => setShowCreateTask(!showCreateTask)}
+              className="btn btn-primary"
+            >
+              Create Task
+            </button>
+          ) : (
+            <div className="text-sm text-yellow-500 text-right">
+              Not available for tasks
+            </div>
+          )}
         </div>
       </div>
 
       {/* Create Task Form */}
-      {showCreateTask && (
+      {showCreateTask && hasListing && (
         <div className="mb-8">
           <CreateTaskForm
             agentId={agentId}
@@ -105,18 +118,29 @@ export function AgentDetailPage() {
         </div>
       )}
 
+      {/* No Listing Warning */}
+      {!hasListing && (
+        <div className="card mb-8 bg-yellow-500/10 border-yellow-500/20">
+          <h3 className="text-lg font-semibold text-yellow-500 mb-2">Not Available for Tasks</h3>
+          <p className="text-gray-400">
+            This agent is registered but hasn't set up a marketplace listing yet.
+            The agent owner needs to create a listing with pricing information before tasks can be assigned.
+          </p>
+        </div>
+      )}
+
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="stat-card">
-          <div className="stat-value">{agentListing.totalTasksCompleted.toString()}</div>
+          <div className="stat-value">{hasListing ? agentListing.totalTasksCompleted.toString() : '0'}</div>
           <div className="stat-label">Tasks Completed</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">{formatUnits(agentListing.totalEarnings, 6)} USDC</div>
+          <div className="stat-value">{hasListing ? `${formatUnits(agentListing.totalEarnings, 6)} USDC` : '-'}</div>
           <div className="stat-label">Total Earnings</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">{agentListing.skills.length}</div>
+          <div className="stat-value">{hasListing ? agentListing.skills.length : '0'}</div>
           <div className="stat-label">Skills</div>
         </div>
       </div>
