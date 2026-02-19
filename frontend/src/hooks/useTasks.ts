@@ -3,7 +3,7 @@ import { useAccount } from 'wagmi';
 import { useContracts } from './useContracts';
 import { parseUnits } from 'viem';
 import toast from 'react-hot-toast';
-import type { Task } from '../types';
+import type { Task, AgentListing } from '../types';
 
 /**
  * Hook for task-related operations
@@ -12,6 +12,19 @@ export function useTasks() {
   const { address } = useAccount();
   const { agentBazaar, agentBazaarWrite, usdc, usdcWrite } = useContracts();
   const queryClient = useQueryClient();
+
+  // Get agent listing
+  const useAgentListing = (agentId?: number) => {
+    return useQuery<AgentListing | null>({
+      queryKey: ['agentListing', agentId],
+      queryFn: async () => {
+        if (!agentBazaar || !agentId) return null;
+        const result = await agentBazaar.read.getAgentListing([BigInt(agentId)]);
+        return result as AgentListing;
+      },
+      enabled: !!agentBazaar && !!agentId,
+    });
+  };
 
   // Get task by ID
   const useTask = (taskId?: `0x${string}`) => {
@@ -89,7 +102,6 @@ export function useTasks() {
   const createTask = useMutation({
     mutationFn: async ({
       agentId,
-      price,
       skill,
       complexity,
       description,
@@ -97,7 +109,6 @@ export function useTasks() {
       deadline,
     }: {
       agentId: number;
-      price: string;
       skill: string;
       complexity: number;
       description: string;
@@ -106,12 +117,10 @@ export function useTasks() {
     }) => {
       if (!agentBazaarWrite) throw new Error('Wallet not connected');
 
-      const priceWei = parseUnits(price, 6);
       const hash = await agentBazaarWrite.write.createTask([
         BigInt(agentId),
-        priceWei,
         skill,
-        complexity,
+        BigInt(complexity),
         description,
         filesUri,
         BigInt(deadline),
@@ -202,6 +211,7 @@ export function useTasks() {
 
   return {
     // Queries
+    useAgentListing,
     useTask,
     useTasksByAgent,
     useTasksByClient,

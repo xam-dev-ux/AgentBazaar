@@ -1,20 +1,20 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTasks } from '../../hooks';
 import { useAccount } from 'wagmi';
 import { LoadingSpinner } from '../Common';
-import { parseUnits } from 'viem';
+import { formatUnits } from 'viem';
 
 interface CreateTaskFormProps {
   agentId: number;
+  basePrice: bigint;
   onSuccess?: () => void;
 }
 
-export function CreateTaskForm({ agentId, onSuccess }: CreateTaskFormProps) {
+export function CreateTaskForm({ agentId, basePrice, onSuccess }: CreateTaskFormProps) {
   const { isConnected } = useAccount();
   const { createTask, approveUSDC, usdcAllowance } = useTasks();
   const [step, setStep] = useState<'form' | 'approve' | 'create'>('form');
   const [formData, setFormData] = useState({
-    price: '',
     skill: '',
     complexity: 5,
     description: '',
@@ -22,11 +22,14 @@ export function CreateTaskForm({ agentId, onSuccess }: CreateTaskFormProps) {
     deadline: 7, // days
   });
 
+  // Calculate price: basePrice * complexity
+  const calculatedPrice = useMemo(() => {
+    return basePrice * BigInt(formData.complexity);
+  }, [basePrice, formData.complexity]);
+
   const needsApproval = usdcAllowance !== undefined &&
     usdcAllowance !== null &&
-    formData.price &&
-    formData.price.trim() !== '' &&
-    parseUnits(formData.price.trim(), 6) > usdcAllowance;
+    calculatedPrice > usdcAllowance;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +43,8 @@ export function CreateTaskForm({ agentId, onSuccess }: CreateTaskFormProps) {
       // Step 1: Approve USDC if needed
       if (needsApproval) {
         setStep('approve');
-        await approveUSDC.mutateAsync(formData.price);
+        // Approve the calculated price
+        await approveUSDC.mutateAsync(formatUnits(calculatedPrice, 6));
       }
 
       // Step 2: Create task
@@ -49,7 +53,6 @@ export function CreateTaskForm({ agentId, onSuccess }: CreateTaskFormProps) {
 
       await createTask.mutateAsync({
         agentId,
-        price: formData.price,
         skill: formData.skill,
         complexity: formData.complexity,
         description: formData.description,
@@ -59,7 +62,6 @@ export function CreateTaskForm({ agentId, onSuccess }: CreateTaskFormProps) {
 
       // Reset form
       setFormData({
-        price: '',
         skill: '',
         complexity: 5,
         description: '',
@@ -106,22 +108,17 @@ export function CreateTaskForm({ agentId, onSuccess }: CreateTaskFormProps) {
           />
         </div>
 
-        {/* Price */}
+        {/* Calculated Price Display */}
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Price (USDC)
           </label>
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            placeholder="10.00"
-            step="0.01"
-            min="0.01"
-            className="input"
-            required
-          />
+          <div className="input bg-gray-800 text-gray-400 cursor-not-allowed">
+            {formatUnits(calculatedPrice, 6)} USDC
+          </div>
+          <p className="mt-1 text-xs text-gray-500">
+            Calculated as: Base Price ({formatUnits(basePrice, 6)}) × Complexity ({formData.complexity})
+          </p>
           {needsApproval && (
             <p className="mt-1 text-xs text-yellow-500">
               USDC approval required for this amount

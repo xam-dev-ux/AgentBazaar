@@ -59,3 +59,14 @@ export interface Escrow {
   released: boolean;
   autoReleaseAt: bigint;
 }
+
+export interface AgentListing {
+  agentId: bigint;
+  isActive: boolean;
+  category: string;
+  basePrice: bigint;
+  skills: string[];
+  supportedTrustModels: number[];
+  totalTasksCompleted: bigint;
+  totalEarnings: bigint;
+}

@@ -1,16 +1,19 @@
 import { useParams, Link } from 'react-router-dom';
-import { useAgent } from '../hooks';
+import { useAgent, useTasks } from '../hooks';
 import { LoadingSpinner, EmptyState } from '../components/Common';
 import { CreateTaskForm } from '../components/Tasks';
 import { useState } from 'react';
+import { formatUnits } from 'viem';
 
 export function AgentDetailPage() {
   const { id } = useParams<{ id: string }>();
   const agentId = id ? parseInt(id) : undefined;
   const { agent, isLoadingAgent } = useAgent(agentId);
+  const { useAgentListing } = useTasks();
+  const { data: agentListing, isLoading: isLoadingListing } = useAgentListing(agentId);
   const [showCreateTask, setShowCreateTask] = useState(false);
 
-  if (isLoadingAgent) {
+  if (isLoadingAgent || isLoadingListing) {
     return (
       <div className="container mx-auto px-4 py-12">
         <LoadingSpinner size="lg" />
@@ -18,7 +21,7 @@ export function AgentDetailPage() {
     );
   }
 
-  if (!agent || !agentId) {
+  if (!agent || !agentId || !agentListing) {
     return (
       <div className="container mx-auto px-4 py-12">
         <EmptyState
@@ -68,6 +71,14 @@ export function AgentDetailPage() {
                 <span className="font-mono">{agent.agentAddress}</span>
               </div>
               <div>
+                <span className="text-gray-400">Base Price:</span>{' '}
+                <span className="font-semibold text-green-400">{formatUnits(agentListing.basePrice, 6)} USDC</span>
+              </div>
+              <div>
+                <span className="text-gray-400">Category:</span>{' '}
+                <span>{agentListing.category || 'General'}</span>
+              </div>
+              <div>
                 <span className="text-gray-400">Registered:</span>{' '}
                 {new Date(Number(agent.registrationTime) * 1000).toLocaleDateString()}
               </div>
@@ -88,6 +99,7 @@ export function AgentDetailPage() {
         <div className="mb-8">
           <CreateTaskForm
             agentId={agentId}
+            basePrice={agentListing.basePrice}
             onSuccess={() => setShowCreateTask(false)}
           />
         </div>
@@ -96,16 +108,16 @@ export function AgentDetailPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="stat-card">
-          <div className="stat-value">0</div>
+          <div className="stat-value">{agentListing.totalTasksCompleted.toString()}</div>
           <div className="stat-label">Tasks Completed</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">-</div>
-          <div className="stat-label">Average Score</div>
+          <div className="stat-value">{formatUnits(agentListing.totalEarnings, 6)} USDC</div>
+          <div className="stat-label">Total Earnings</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">0</div>
-          <div className="stat-label">Total Feedback</div>
+          <div className="stat-value">{agentListing.skills.length}</div>
+          <div className="stat-label">Skills</div>
         </div>
       </div>
 
